@@ -1,3 +1,5 @@
+::Chef::Resource.send(:include, HyoneSourcePackage::Helper)
+
 actions [:install]
 default_action :install
 
@@ -16,4 +18,39 @@ attr_accessor :exists
 
 def long_name
   "#{name}-#{version}"
+end
+
+
+# define attribute's lazy default value
+
+def user(arg =  nil)
+  if @user.nil?
+    arg ||= node['hyone_source_package']['user']
+  end
+
+  set_or_return(:user, arg, :kind_of => String)
+end
+
+def group(arg =  nil)
+  if @group.nil?
+    arg ||= node['hyone_source_package']['group'] || user
+  end
+
+  set_or_return(:group, arg, :kind_of => String)
+end
+
+def home(arg = nil)
+  if @home.nil?
+    arg ||= node['hyone_source_package']['home'] || user_home(user)
+  end
+
+  set_or_return(:home, arg, :kind_of => String)
+end
+
+def prefix(arg = nil)
+  if @prefix.nil?
+    arg ||= ::File.join(home, 'local/apps', long_name)
+  end
+
+  set_or_return(:prefix, arg, :kind_of => String)
 end

@@ -16,8 +16,6 @@ end
 
 
 def load_current_resource
-  configure_resource(new_resource)
-
   @current_resource = Chef::Resource::HyoneSourcePackage.new(new_resource.name)
   @current_resource.version(new_resource.version)
   @current_resource.source_url(new_resource.source_url)
@@ -36,19 +34,9 @@ end
 
 private
 
-def configure_resource(resource)
-  resource.user(resource.user || node['hyone_source_package']['user'])
-  resource.group(resource.group || node['hyone_source_package']['group'] || new_resource.user)
-  resource.home(resource.home || node['hyone_source_package']['home'] || user_home(resource.user))
-  resource.prefix(resource.prefix || ::File.join(resource.home, 'local/apps', resource.long_name))
-
-  resource
-end
-
-
 def install_from_source
-  _bindir  = ::File.join new_resource.home, 'local/bin'
-  _workdir = ::File.join '/tmp', new_resource.long_name
+  _bindir  = ::File.join(new_resource.home, 'local/bin')
+  _workdir = ::File.join('/tmp', new_resource.long_name)
 
   workdir_resource = directory _workdir do
     action :create
@@ -77,7 +65,6 @@ def install_from_source
 
   link_to_bin(_bindir)
 end
-
 
 
 def prepare_source_distribution(_workdir)
