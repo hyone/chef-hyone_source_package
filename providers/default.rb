@@ -4,6 +4,8 @@ require 'uri'
 ::Chef::Provider.send(:include, HyoneSourcePackage::Helper)
 
 
+use_inline_resources if defined? use_inline_resources
+
 action :install do
   if current_resource.exists
     Chef::Log.info "#{current_resource.name} already exists - nothing to do."
