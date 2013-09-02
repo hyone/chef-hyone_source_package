@@ -51,7 +51,7 @@ def install_from_source
   prepare_source_distribution(_workdir)
 
   # compile and install
-  bash "install package from source: #{new_resource.long_name}" do
+  bash "install #{new_resource.long_name} from source" do
     user  new_resource.user
     group new_resource.group
     code <<-EOL
@@ -85,7 +85,7 @@ def prepare_source_distribution(_workdir)
     when _filename.end_with?('bz2') then 'jxvf'
   end
 
-  bash "extract archive: #{_path}" do
+  bash "extract #{_path}" do
     user  new_resource.user
     group new_resource.group
     code <<-EOC
@@ -107,7 +107,7 @@ def link_to_bin(_bindir)
     end
   end
 
-  ruby_block "link to executables: #{new_resource.name}" do
+  ruby_block "link #{new_resource.name} to bin directory" do
     block do
       (Pathname(new_resource.prefix) + 'bin').each_child.select {|x| x.file? }.each do |dist|
         link_resource = Chef::Resource::Link.new(::File.join(_bindir, dist.basename), run_context)
