@@ -56,7 +56,7 @@ def install_from_source
     group new_resource.group
     code <<-EOL
       cd #{_workdir};
-      cd `ls | head -1`
+      cd `ls -d */ | head -1`
       ./configure --prefix #{new_resource.prefix} #{new_resource.configure_options}
       make
       make install
