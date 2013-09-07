@@ -104,6 +104,7 @@ def link_to_bin(_bindir)
       owner new_resource.user
       group new_resource.group
       mode 0755
+      recursive true
     end
   end
 
