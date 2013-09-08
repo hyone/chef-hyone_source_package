@@ -1,9 +1,0 @@
-{
-  "hyone_source_package": {
-    "user":  "vagrant"
-  },
-
-  "run_list": [
-    "recipe[hyone_source_package::default]"
-  ]
-}

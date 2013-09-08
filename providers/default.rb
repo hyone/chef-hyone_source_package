@@ -72,14 +72,16 @@ end
 
 def prepare_source_distribution(_workdir)
   _filename = ::File.basename URI(new_resource.source_url).path
-  _path     = ::File.join _workdir, _filename
+  _path     = ::File.join(_workdir, _filename)
 
-  archivefile = remote_file _path do
-    source   new_resource.source_url
-    checksum new_resource.source_checksum
-    owner new_resource.user
-    group new_resource.group
-  end
+  archivefile =
+    remote_file _path do
+      source   new_resource.source_url
+      checksum new_resource.source_checksum
+      owner new_resource.user
+      group new_resource.group
+      action :create_if_missing
+    end
 
   _extract_option = case
     when _filename.end_with?('gz')  then 'zxvf'
@@ -89,13 +91,13 @@ def prepare_source_distribution(_workdir)
   bash "extract #{_path}" do
     user  new_resource.user
     group new_resource.group
+    cwd _workdir
     code <<-EOC
-      tar #{_extract_option} #{_path} -C #{_workdir}
+      tar #{_extract_option} #{_path}
     EOC
-    # clean up download file
-    notifies :delete, archivefile
+    not_if "ls -d */ | grep #{new_resource.name}"
   end
-end 
+end
 
 
 def link_to_bin(_bindir)

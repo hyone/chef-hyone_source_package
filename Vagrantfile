@@ -4,14 +4,14 @@
 require 'json'
 
 
-HOST_ADDR = "33.33.33.10"
+HOST_ADDR = "33.33.33.11"
 
 Vagrant.configure("2") do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.vm.hostname = "hyone-ruby-berkshelf"
+  config.vm.hostname = "hyone-source-package"
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "Berkshelf-CentOS-6.3-x86_64-minimal"
@@ -58,9 +58,6 @@ Vagrant.configure("2") do |config|
   # View the documentation for the provider you're using for more
   # information on available options.
 
-  config.ssh.max_tries = 40
-  config.ssh.timeout   = 120
-
   # The path to the Berksfile to use with Vagrant Berkshelf
   # config.berkshelf.berksfile_path = "./Berksfile"
 
@@ -77,7 +74,10 @@ Vagrant.configure("2") do |config|
   # config.berkshelf.except = []
 
   config.vm.provision :chef_solo do |chef|
-    chef.json     = JSON.parse File.read("./nodes/#{HOST_ADDR}.json")
+    node_path = [HOST_ADDR, 'default']
+      .map  {|name| "./nodes/#{name}.json"}
+      .find {|path| ::File.exists? path }
+    chef.json = node_path ? JSON.parse(File.read(node_path)) : {}
     chef.run_list = chef.json["run_list"] || [
       "recipe[hyone_ruby::rbenv]"
     ]
