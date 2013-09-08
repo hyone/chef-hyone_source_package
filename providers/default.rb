@@ -37,8 +37,9 @@ end
 private
 
 def install_from_source
+  _cache_path = ::Chef::Config[:file_cache_path]
   _bindir  = ::File.join(new_resource.home, 'local/bin')
-  _workdir = ::File.join('/tmp', new_resource.long_name)
+  _workdir = ::File.join(_cache_path, new_resource.long_name)
 
   workdir_resource = directory _workdir do
     action :create
