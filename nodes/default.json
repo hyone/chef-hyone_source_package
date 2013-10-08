@@ -1,0 +1,6 @@
+{
+  "run_list": [
+    "recipe[hyone_source_package::default]",
+    "recipe[hyone_source_package::test]"
+  ]
+}
