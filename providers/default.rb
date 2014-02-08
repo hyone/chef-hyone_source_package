@@ -102,14 +102,12 @@ end
 
 
 def link_to_bin(_bindir)
-  unless ::File.exists? _bindir
-    directory _bindir do
-      action :create
-      owner new_resource.user
-      group new_resource.group
-      mode 0755
-      recursive true
-    end
+  directory _bindir do
+    action :create
+    owner new_resource.user
+    group new_resource.group
+    mode 0755
+    recursive true
   end
 
   ruby_block "link #{new_resource.name} to bin directory" do
