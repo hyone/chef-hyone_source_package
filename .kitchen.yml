@@ -1,0 +1,26 @@
+---
+driver:
+  name: docker
+  use_sudo: false
+  socket: <%= ENV['DOCKER_HOST'] %>
+
+provisioner:
+  name: chef_solo
+
+platforms:
+  - name: ubuntu-12.04
+  - name: centos-6.4
+
+suites:
+  - name: default
+    run_list:
+      - recipe[hyone_source_package-test::default]
+    attributes:
+
+  - name: user
+    run_list:
+      - recipe[hyone_source_package-test::default]
+    attributes:
+      main:
+        user: hoge
+        group: hoge
