@@ -8,10 +8,9 @@ attribute :version,           :kind_of => String
 attribute :source_url,        :kind_of => String
 attribute :source_checksum,   :kind_of => String
 attribute :configure_options, :kind_of => String
-attribute :prefix,            :kind_of => String
+attribute :prefix_base,       :kind_of => String
 attribute :user,              :kind_of => String
 attribute :group,             :kind_of => String
-attribute :home,              :kind_of => String
 
 
 attr_accessor :exists
@@ -23,7 +22,7 @@ end
 
 # define attribute's lazy default value
 
-def group(arg =  nil)
+def group(arg = nil)
   if @group.nil?
     arg ||= user
   end
@@ -31,18 +30,17 @@ def group(arg =  nil)
   set_or_return(:group, arg, :kind_of => String)
 end
 
-def home(arg = nil)
-  if @home.nil?
-    arg ||= user_home(user)
+def prefix_base(arg = nil)
+  if @prefix_base.nil?
+    arg ||= case user
+            when 'root' then '/usr/local'
+            else ::File.join(user_home(user), 'local')
+            end
   end
 
-  set_or_return(:home, arg, :kind_of => String)
+  set_or_return(:prefix_base, arg, :kind_of => String)
 end
 
-def prefix(arg = nil)
-  if @prefix.nil?
-    arg ||= ::File.join(home, 'local/apps', long_name)
-  end
-
-  set_or_return(:prefix, arg, :kind_of => String)
+def prefix
+  ::File.join(prefix_base, 'apps', long_name)
 end

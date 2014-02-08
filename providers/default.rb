@@ -10,7 +10,7 @@ action :install do
   if current_resource.exists
     Chef::Log.info "#{current_resource.name} already exists - nothing to do."
   else
-    converge_by("Install #{new_resource.name} #{new_resource.version} to #{new_resource.prefix}") do
+    converge_by("Install #{new_resource.name} #{new_resource.version} to #{new_resource.prefix_base}") do
       install_from_source
     end
   end
@@ -23,10 +23,9 @@ def load_current_resource
   @current_resource.source_url(new_resource.source_url)
   @current_resource.source_checksum(new_resource.source_checksum)
   @current_resource.configure_options(new_resource.configure_options)
-  @current_resource.prefix(new_resource.prefix)
+  @current_resource.prefix_base(new_resource.prefix_base)
   @current_resource.user(new_resource.user)
   @current_resource.group(new_resource.group)
-  @current_resource.home(new_resource.home)
 
   if ::File.exists? @current_resource.prefix
     @current_resource.exists = true
@@ -38,8 +37,10 @@ private
 
 def install_from_source
   _cache_path = ::Chef::Config[:file_cache_path]
-  _bindir  = ::File.join(new_resource.home, 'local/bin')
-  _workdir = ::File.join(_cache_path, new_resource.long_name)
+  _bindir     = ::File.join(new_resource.prefix_base, 'bin')
+  _workdir    = ::File.join(_cache_path, new_resource.long_name)
+
+  run_context.include_recipe 'build-essential'
 
   workdir_resource = directory _workdir do
     action :create
