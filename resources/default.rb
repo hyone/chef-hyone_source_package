@@ -34,7 +34,7 @@ def prefix_base(arg = nil)
   if @prefix_base.nil?
     arg ||= case user
             when 'root' then '/usr/local'
-            else ::File.join(user_home(user), 'local')
+            else ::File.join(get_home(user, run_context), 'local')
             end
   end
 
