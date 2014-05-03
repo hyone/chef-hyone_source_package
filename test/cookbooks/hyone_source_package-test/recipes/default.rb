@@ -19,6 +19,12 @@ group _group do
   action [:create]
 end
 
+
+case
+when platform?('ubuntu')
+  include_recipe 'apt'
+end
+
 case node['platform_family']
 when 'rhel', 'fedora'
   %w[readline-devel]
