@@ -3,6 +3,7 @@ _user  = _attr.fetch('user', 'root')
 _group = _attr.fetch('group', _user)
 _home  = _user == 'root' ? '/root' : "/home/#{_user}"
 
+
 # user and group
 user _user do
   supports manage_home: true
@@ -11,13 +12,13 @@ user _user do
   # dispite that 'manage_home: true' on ubuntu
   home  _home
   shell '/bin/bash'
-  action [:create]
-end
+  action [:nothing]
+end.run_action(:create)
 
 group _group do
   members [_user]
-  action [:create]
-end
+  action [:nothing]
+end.run_action(:create)
 
 
 case
