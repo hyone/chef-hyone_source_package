@@ -84,6 +84,8 @@ def prepare_source_distribution(_workdir)
       action :create_if_missing
     end
 
+  package 'tar'
+
   _extract_option = case
     when _filename.end_with?('gz')  then 'zxvf'
     when _filename.end_with?('bz2') then 'jxvf'
