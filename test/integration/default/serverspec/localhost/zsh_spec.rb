@@ -2,7 +2,7 @@ require 'spec_helper'
 
 
 _prefix  = '/usr/local'
-_version = '5.0.5'
+_version = '5.0.6'
 _zsh     = ::File.join(_prefix, "apps/zsh-#{_version}/bin/zsh")
 _alias   = ::File.join(_prefix, 'bin/zsh')
 

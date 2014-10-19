@@ -54,7 +54,7 @@ end
 
 hyone_source_package 'zsh' do
   user _user
-  version '5.0.5'
-  source_url "http://downloads.sourceforge.net/project/zsh/zsh/5.0.5/zsh-5.0.5.tar.gz"
+  version '5.0.6'
+  source_url "http://downloads.sourceforge.net/project/zsh/zsh/5.0.6/zsh-5.0.6.tar.gz"
   configure_options '--without-tcsetpgrp'
 end
